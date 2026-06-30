@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-velvet-700/40;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body bg-cream-50 text-plum-900 antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  html.dark body {
+    @apply bg-velvet-900 text-cream-100;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  /* Visible keyboard focus everywhere — accessibility floor */
+  :focus-visible {
+    outline: 2px solid theme('colors.gold.400');
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: theme('colors.spotlight.500');
+    color: white;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-spotlight-500/40 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-spotlight-500/70;
+  }
+
+  /* Hide native cursor only on fine-pointer (desktop) devices so our
+     custom spotlight cursor can take over without breaking touch/mobile. */
+  @media (pointer: fine) {
+    .custom-cursor-active,
+    .custom-cursor-active a,
+    .custom-cursor-active button {
+      cursor: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Glassmorphism surface, the base card treatment across the app */
+  .glass {
+    @apply bg-white/60 dark:bg-white/[0.06] backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-glass;
+  }
+
+  .glass-strong {
+    @apply bg-white/80 dark:bg-velvet-800/70 backdrop-blur-2xl border border-white/50 dark:border-white/10 shadow-glass;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-400 via-spotlight-500 to-stage-500;
+  }
+
+  .eyebrow {
+    @apply font-mono text-xs tracking-[0.25em] uppercase text-spotlight-500 dark:text-gold-400;
+  }
+
+  /* Signature element: a ticket-stub card, evoking a real event ticket.
+     A notch is punched on the left edge and a dashed perforation divides
+     the stub from the body — used for event cards & pricing summaries. */
+  .ticket-stub {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: visible;
+  }
+
+  .ticket-stub::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: theme('colors.cream.50');
+    z-index: 5;
+  }
+  html.dark .ticket-stub::before {
+    background: theme('colors.velvet.900');
+  }
+
+  .ticket-stub::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: theme('colors.cream.50');
+    z-index: 5;
+  }
+  html.dark .ticket-stub::after {
+    background: theme('colors.velvet.900');
+  }
+
+  .ticket-perforation {
+    background-image: linear-gradient(to bottom, transparent 0, transparent 4px, currentColor 4px, currentColor 8px, transparent 8px);
+    background-size: 1px 12px;
+    background-repeat: repeat-y;
+    opacity: 0.25;
+  }
+
+  /* Skeleton shimmer used everywhere instead of spinners */
+  .skeleton {
+    @apply relative overflow-hidden bg-plum-900/[0.06] dark:bg-white/[0.06] rounded-xl;
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg, transparent, rgba(232,181,99,0.18), transparent);
+    animation: shimmer 1.6s infinite;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold-400 to-spotlight-500 text-velvet-950 font-semibold px-6 py-3 shadow-glow transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full glass px-6 py-3 font-semibold transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98];
+  }
+
+  .input-glass {
+    @apply w-full rounded-xl glass px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-gold-400/60 transition;
+  }
+}
